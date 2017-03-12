@@ -1,0 +1,78 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #aaa;
+}
+
+h1, h2, h3 {
+  color: #ddd;
+}
+
+a {
+  text-decoration: none;
+  color: #09f;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* .wrapper {} */
+
+.board {
+    background-color: blue;
+    padding: 1.2rem;
+    height: 50rem;
+
+    .inner {
+	display: flex;
+	flex-direction: column;
+	flex-basis: 100%;
+	align-items: center;
+	height: 80%;
+	border: 1px orange solid;
+	
+	.row {
+	    background-color: lightblue;
+	    height: 5.5rem;
+	    padding: 0.25rem 0.375rem;
+	    display: flex;
+	    flex-direction: row;
+	    align-content: space-between;
+	    margin: auto;
+	
+	    .cell {
+		background-color: grey;
+		border: 1px solid grey;
+		border-radius: 50%;
+		flex-basis: 100%;
+		width: 5rem;
+		height: 5rem;
+		cursor: pointer;
+		&:hover {
+		    background-color: yellow; /* TODO: use sass and ligthen() */
+		    border: 1px solid green;
+		}
+
+		/* TEMP */
+		&.selected {
+		    background-color: dodgerblue;
+		    border-color: dodgerblue;
+		}
+    
+		&.p1 { background-color: dodgerblue; }
+		&.p2 { background-color: red; }
+	    }
+	}
+    }
+}
+
