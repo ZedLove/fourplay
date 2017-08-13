@@ -4,11 +4,16 @@
 
 ;; -------------------------
 ;; App State
-
 (def app-state
-  (r/atom {:board
+  (r/atom {:players {:player-1 {:name "Player 1"
+                                :pieces 21}
+                     :player-2 {:name "Player 2"
+                                :pieces 21}}
+           :turn :player-1
+           :board
            ;; TODO - move to ns
            ;; [x y] {:details-map }
+
            {0 {[0 0] {:selected false} ;; ^
                [1 0] {:selected false} ;; |
                [2 0] {:selected false} ;; y <-- x -->
@@ -58,18 +63,17 @@
                [4 6] {:selected false}
                [5 6] {:selected false}}}}))
 
-
 ;; -------------------------
 ;; Board Components
 
-(defn cell [[[x y] {:keys [selected] :as opts}]]
+(defn cell [[[x y] {:keys [selected] :as c}]]
   [:div
-   (merge opts
+   (merge c
           {:class (str "cell" (when selected " selected"))
            :x x             
            :y y
-           :on-click #(gp/click-cell app-state [x y])})])
-
+           :on-click #(println (gp/click-cell app-state [x y])) ;; TODO - pass app-state here?
+           })])
 
 (defn row [r]
   [:div.row
@@ -79,6 +83,13 @@
             [cell c]))
         (second r))])
 
+(defn scoreboard [players turn]
+  (let [{:keys [player-1 player-2]} players
+        is-turn? #(= turn (first (keys %)))]
+    [:h2.score
+     [:span {:class (str (when (is-turn? player-1) " p1"))} (str (:name player-1))]
+     [:span {:class (str (when (is-turn? player-2) " p2"))} (str (:name player-2))]]))
+
 (defn board-component [board]
   [:div.board
    [:div.inner
@@ -87,18 +98,14 @@
            [row r])
          board)]])
 
-
-
 ;; -------------------------
 ;; Main
 
-
-
 (defn home-page []
-  (let [{:keys [board] :as st} @app-state]
+  (let [{:keys [board players turn] :as st} @app-state]
     [:div.wrapper
      [:h1 "Fourplay"]
-     [:h2.score "Player 1 - 0 | 0 - Player 2"]
+     [scoreboard players turn]
      [board-component board]]))
 
 ;; -------------------------
